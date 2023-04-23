@@ -5,13 +5,13 @@ import { AppModule } from './app.module';
 import config from './config/configuration';
 import { HttpExceptionFilter } from './filters/exception.filter';
 
-const globalPrefix = '/api';
+const globalPrefix = '/api/v1';
 const configureSwagger = (app: INestApplication) => {
   const baseApis = '/' + config().baseUrl + globalPrefix;
   const baseUrl = baseApis.replace('//', '/');
   const swaggerDocOptions = new DocumentBuilder()
-    .setTitle('Account-service')
-    .setDescription('The account-service API description')
+    .setTitle('Zuj Backend')
+    .setDescription('The zuj-backend API description')
     .setVersion('1.0.0')
     .addServer(baseUrl)
     .setBasePath(baseUrl)
@@ -30,7 +30,7 @@ const configureSwagger = (app: INestApplication) => {
   const swaggerDoc = SwaggerModule.createDocument(app, swaggerDocOptions, {
     ignoreGlobalPrefix: true,
   });
-  SwaggerModule.setup('docs', app, swaggerDoc);
+  SwaggerModule.setup('/v1/docs', app, swaggerDoc);
 };
 
 const configureValidation = (app: INestApplication) => {

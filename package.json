@@ -21,7 +21,8 @@
     "typeorm": "typeorm-ts-node-esm",
     "migration:generate": "yarn run typeorm migration:generate -d src/migrations",
     "migration:create": "yarn typeorm migration:create -d src/migrations",
-    "migration:run": "yarn run typeorm migration:run -d ormconfig"
+    "migration:run": "yarn run typeorm migration:run -d ormconfig",
+    "migration:revert": "yarn run typeorm migration:revert -d ormconfig"
   },
   "dependencies": {
     "@nestjs/common": "^9.0.0",

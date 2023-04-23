@@ -7,14 +7,12 @@ import { HttpExceptionFilter } from './filters/exception.filter';
 
 const globalPrefix = '/api/v1';
 const configureSwagger = (app: INestApplication) => {
-  const baseApis = '/' + config().baseUrl + globalPrefix;
-  const baseUrl = baseApis.replace('//', '/');
+  const baseUrl = globalPrefix;
   const swaggerDocOptions = new DocumentBuilder()
     .setTitle('Zuj Backend')
     .setDescription('The zuj-backend API description')
-    .setVersion('1.0.0')
+    .setVersion('v1')
     .addServer(baseUrl)
-    .setBasePath(baseUrl)
     .addBearerAuth(
       {
         type: 'apiKey',

@@ -5,11 +5,11 @@ export class ChangeTypeDataOfScoreInMatch1682277171712
 {
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.query(
-      'alter table `matches` alter column scores varchar(20)',
+      'alter table `matches` modify column `score` varchar(255)',
     );
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.query('alter table `matches` alter column scores int');
+    await queryRunner.query('alter table `matches` modify column `score` int');
   }
 }

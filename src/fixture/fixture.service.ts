@@ -41,7 +41,26 @@ export class FixtureService {
       });
     }
     queryBuilder.skip(skip).limit(perPage);
-    const [results, count] = await queryBuilder.getManyAndCount();
-    return { data: results, page, perPage, totalItem: count };
+    const results = await queryBuilder.getRawMany();
+    return { data: results, page, perPage, totalItem: results.length };
+  }
+
+  async getFixturesCalendarEnable(from, to: number): Promise<any> {
+    const calendar = this.dataSource
+      .getRepository(Match)
+      .createQueryBuilder('matches')
+      .select('DATE(start_at) as day')
+      .addSelect('1', 'enabled')
+      .where('matches.start_at < :to', { to: moment(to * 1000).toDate() })
+      .where('matches.start_at > :from', { from: moment(from * 1000).toDate() })
+      .groupBy('day')
+      .orderBy('day');
+    const results = await calendar.getRawMany();
+
+    return results.map((result: { day: string; enabled: string }) => {
+      return {
+        day: moment(result.day).format('YYYY-MM-DD'),
+      };
+    });
   }
 }

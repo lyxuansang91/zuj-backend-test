@@ -1,6 +1,5 @@
 import { Injectable, Logger } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Match } from 'src/entities/match.entity';
+import { Match } from '../entities';
 import { DataSource } from 'typeorm';
 import * as moment from 'moment-timezone';
 
@@ -9,12 +8,17 @@ export class FixtureService {
   private readonly logger = new Logger(FixtureService.name);
   constructor(private readonly dataSource: DataSource) {}
 
-  async getFixtures(
-    from: number,
-    to: number,
-    page: number,
-    perPage: number,
-  ): Promise<any> {
+  async getFixtures({
+    from,
+    to,
+    perPage,
+    page,
+  }: {
+    from?: number;
+    to?: number;
+    perPage: number;
+    page: number;
+  }): Promise<any> {
     const skip = (page - 1) * perPage;
     const queryBuilder = this.dataSource
       .getRepository(Match)
@@ -36,26 +40,43 @@ export class FixtureService {
       });
     }
     if (to) {
-      queryBuilder.where('matches.end_at <= :to', {
+      queryBuilder.andWhere('matches.end_at <= :to', {
         to: moment(to * 1000).toDate(),
       });
     }
-    queryBuilder.skip(skip).limit(perPage);
-    const results = await queryBuilder.getRawMany();
-    return { data: results, page, perPage, totalItem: results.length };
+    const results = await queryBuilder.offset(skip).limit(perPage).getRawMany();
+    return {
+      data: results,
+      page: Number(page),
+      perPage: Number(perPage),
+      totalItem: results.length,
+    };
   }
 
-  async getFixturesCalendarEnable(from, to: number): Promise<any> {
-    const calendar = this.dataSource
-      .getRepository(Match)
+  async getFixturesCalendarEnable({
+    from,
+    to,
+  }: {
+    from?: number;
+    to?: number;
+  }): Promise<any> {
+    const matchRepo = this.dataSource.getRepository(Match);
+    const matchQuery = matchRepo
       .createQueryBuilder('matches')
       .select('DATE(start_at) as day')
-      .addSelect('1', 'enabled')
-      .where('matches.start_at < :to', { to: moment(to * 1000).toDate() })
-      .where('matches.start_at > :from', { from: moment(from * 1000).toDate() })
-      .groupBy('day')
-      .orderBy('day');
-    const results = await calendar.getRawMany();
+      .addSelect('1', 'enabled');
+    if (from) {
+      matchQuery.where('matches.start_at > :from', {
+        from: moment(from * 1000).toDate(),
+      });
+    }
+    if (to) {
+      matchQuery.andWhere('matches.start_at < :to', {
+        to: moment(to * 1000).toDate(),
+      });
+    }
+    matchQuery.groupBy('day').orderBy('day');
+    const results = await matchQuery.getRawMany();
 
     return results.map((result: { day: string; enabled: string }) => {
       return {

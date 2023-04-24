@@ -1,8 +1,8 @@
 {
   "name": "zuj-backend-test",
   "version": "0.0.1",
-  "description": "",
-  "author": "",
+  "description": "Zuj Backend Test",
+  "author": "Sang li",
   "private": true,
   "license": "UNLICENSED",
   "scripts": {

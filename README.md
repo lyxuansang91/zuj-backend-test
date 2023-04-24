@@ -3,7 +3,8 @@
 ## Database Schema Design & API Docs
 
 - [DB Diagram](https://dbdocs.io/sanglx/zuj-backend-test).
-- [API Docs](/<path/to/your-domain>/v1/docs).
+- [API Docs](https://zuj.springlee.dev/v1/docs).
+- [API Links](https://zuj.springlee.dev).
 
 ## Development
 

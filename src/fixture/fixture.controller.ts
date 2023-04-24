@@ -12,36 +12,30 @@ export class FixtureController {
   @Get()
   async getFixtures(
     @Query() { from, to, page, perPage }: GetFixturesDto,
-    @Res() res: Response,
-    @Next() next: NextFunction,
-  ) {
+  ): Promise<any> {
     try {
-      const result = await this.fixtureService.getFixtures(
+      const result = await this.fixtureService.getFixtures({
         from,
         to,
         page,
         perPage,
-      );
-      return res.json(result);
-    } catch (error) {
-      next(error);
-    }
+      });
+      return result;
+    } catch (error) {}
   }
 
   @Get('/calendar')
   async getFixtureCalendar(
     @Query() { from, to }: GetFixtureCalendarDto,
-    @Res() res: Response,
-    @Next() next: NextFunction,
-  ) {
+  ): Promise<any> {
     try {
-      const result = await this.fixtureService.getFixturesCalendarEnable(
+      const result = await this.fixtureService.getFixturesCalendarEnable({
         from,
         to,
-      );
-      return res.json(result);
+      });
+      return result;
     } catch (error) {
-      next(error);
+      console.log(error);
     }
   }
 }

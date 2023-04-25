@@ -57,6 +57,18 @@ $ yarn run migration:create src/migrations<migration-name>
 $ yarn run migration:revert
 ```
 
+- To add seed data, we have to build first:
+
+```bash
+$ yarn build
+```
+
+then we can use the following command:
+
+```bash
+$ node dist/src/seed.js
+```
+
 ### Running the app
 
 ```bash

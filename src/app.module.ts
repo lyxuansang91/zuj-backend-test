@@ -6,6 +6,7 @@ import configuration from './config/configuration';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { TypeOrmConfigService } from './typeorm/typeorm.service';
 import { FixtureModule } from './fixture/fixture.module';
+import { SeedModule } from './seed/seed.module';
 
 @Module({
   imports: [
@@ -17,6 +18,7 @@ import { FixtureModule } from './fixture/fixture.module';
       useClass: TypeOrmConfigService,
     }),
     FixtureModule,
+    SeedModule,
   ],
   controllers: [AppController],
   providers: [AppService],
